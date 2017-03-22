@@ -3,18 +3,15 @@ package zhihu;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by IceWhite on 17/3/18.
- */
+
 public class Spider {
-    static String sendGet(String url){
+    static String SendGet(String url){
         String result = "";
 
         BufferedReader in = null;
@@ -44,25 +41,49 @@ public class Spider {
         return result;
     }
 
-    static ArrayList<Zhihu> getZhihu(String content){
-        ArrayList<Zhihu> results = new ArrayList<>();
-        // 获取问题的正则
-        Pattern questionPattern = Pattern.compile("post-link.+?>(.+?)<");
-        Matcher questionMatcher = questionPattern.matcher(content);
-        // 获取链接的正则
-        Pattern urlPattern = Pattern.compile("post-link.+?href=\"(.+?)\"");
-        Matcher urlMatcher = urlPattern.matcher(content);
+    // 获取知乎(推荐)文章
+    static ArrayList<Post> GetZhihuPosts(String content){
+        // 保存文章的列表
+        ArrayList<Post> postList = new ArrayList<>();
 
-        boolean isFind = questionMatcher.find() && urlMatcher.find();
+        // 获取文章标题的正则
+        Pattern postPattern = Pattern.compile("post-link.+?>(.+?)<");
+        Matcher postMatcher = postPattern.matcher(content);
+        // 获取文章链接的正则
+        Pattern postUrlPattern = Pattern.compile("post-link.+?href=\"(.+?)\"");
+        Matcher postUrlMatcher = postUrlPattern.matcher(content);
+
+        boolean isFind = postMatcher.find() && postUrlMatcher.find();
 
         while (isFind){
-            Zhihu zhihuTmp = new Zhihu();
-            zhihuTmp.question = questionMatcher.group(1);
-            zhihuTmp.zhihuUrl = urlMatcher.group(1);
-            results.add(zhihuTmp);
-            isFind = questionMatcher.find() && urlMatcher.find();
+            Post postTmp = new Post();
+            postTmp.title = postMatcher.group(1);
+            postTmp.postUrl = postUrlMatcher.group(1);
+            postList.add(postTmp);
+            isFind = postMatcher.find() && postUrlMatcher.find();
         }
-        return results;
+        return postList;
+    }
 
+    // 获取知乎(推荐)问题
+    static ArrayList<Question> GetZhihuQuestions(String content){
+        // 保存问题的列表
+        ArrayList<Question> questionList = new ArrayList<>();
+
+        // 获取问题的正则
+//        Pattern questionPattern = Pattern.compile("question_link.+?>(.+?)<");
+//        Matcher questionMatcher = questionPattern.matcher(content);
+        // 获取问题链接的正则
+        Pattern questionUrlPattern = Pattern.compile("question_link.+?href=\"(.+?)\"");
+        Matcher questionUrlMatcher = questionUrlPattern.matcher(content);
+
+        boolean isFind = questionUrlMatcher.find();
+
+        while (isFind){
+            Question questionTmp = new Question(questionUrlMatcher.group(1));
+            questionList.add(questionTmp);
+            isFind = questionUrlMatcher.find();
+        }
+        return questionList;
     }
 }

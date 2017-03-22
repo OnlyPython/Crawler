@@ -18,28 +18,28 @@ public class BaiduCrawler {
 
         BufferedReader in = null;
 
-        try {
-            URL realUrl = new URL(url);
-            URLConnection connection = realUrl.openConnection();
-
-            connection.connect();
-
-            in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-            String line;
-            while ((line = in.readLine()) != null){
-                result += line;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            try {
-                if (in != null){
-                    in.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        try {
+//            URL realUrl = new URL(url);
+//            URLConnection connection = realUrl.openConnection();
+//
+//            connection.connect();
+//
+//            in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+//            String line;
+//            while ((line = in.readLine()) != null){
+//                result += line;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }finally {
+//            try {
+//                if (in != null){
+//                    in.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
         return result;
     }
     
