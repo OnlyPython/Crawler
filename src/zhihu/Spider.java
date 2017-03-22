@@ -19,7 +19,7 @@ public class Spider {
         try {
             URL realUrl = new URL(url);
             URLConnection connection = realUrl.openConnection();
-
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4)");
             connection.connect();
 
             in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
